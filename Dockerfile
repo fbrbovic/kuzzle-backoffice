@@ -1,9 +1,6 @@
 FROM kuzzleio/base
 MAINTAINER Kuzzle <support@kuzzle.io>
 
-COPY ./ /var/app
-COPY ./docker-compose/scripts/run.sh /run.sh
-
 WORKDIR /var/app
 
 RUN apt-get update && apt-get install -y \
@@ -13,15 +10,7 @@ RUN apt-get update && apt-get install -y \
       rbenv \
       python \
     && npm install -g \
-      bower \
-      http-server \
-    && npm install \
-    && gem install sass --version 3.2.10 \
-    && bower install --allow-root \
-    && npm run build \
-    && mv dist /tmp/dist && rm -rf /var/app/* && mv /tmp/dist /var/app \
-    && chmod 755 /run.sh \
-    && mv /run.sh /var/app \
+      kuzzle-backoffice \
     && apt-get clean \
     && apt-get remove -y \
       build-essential \
@@ -31,4 +20,4 @@ RUN apt-get update && apt-get install -y \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-CMD ["/var/app/run.sh"]
+CMD ["kuzzle-backoffice start"]
